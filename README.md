@@ -7,4 +7,4 @@ Stochastic Soundscape program in Python
 - scipy
 - audioop
 - wave
-- [Librosa]{http://nbviewer.jupyter.org/github/librosa/librosa/blob/master/examples/LibROSA%20demo.ipynb}
+- [Librosa](http://nbviewer.jupyter.org/github/librosa/librosa/blob/master/examples/LibROSA%20demo.ipynb)
