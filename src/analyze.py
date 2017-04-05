@@ -8,6 +8,7 @@ import sys, os
 import wave, struct
 import numpy
 import librosa
+from PyTransitionMatrix.Markov import TransitionMatrix as tm
 
 # Analyze a single sound file
 def analyze(fname, outfile, INTERVAL=50000):
