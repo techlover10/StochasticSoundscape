@@ -48,7 +48,8 @@ def analyze(fname, INTERVAL=50000):
 def data_gen():
     markov_master = tm('master_data')
     for fname in os.listdir('./data'):
-        curr_out_data = analyze(fname)
-        markov_master.load_data(curr_out_data)
+        if fname[len(fname)-4:len(fname)] == '.wav':
+            curr_out_data = analyze(os.path.abspath('data/' + fname))
+            markov_master.load_data(curr_out_data)
 
     markov_master.save()
