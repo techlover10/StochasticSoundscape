@@ -6,3 +6,7 @@
 # Runs the main application.  Uses existing data to
 # generate a new piece.
 
+import analyze
+
+analyze.data_gen()
+

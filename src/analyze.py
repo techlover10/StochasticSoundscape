@@ -11,12 +11,15 @@ import librosa
 from PyTransitionMatrix.Markov import TransitionMatrix as tm
 
 # Analyze a single sound file
-def analyze(fname, outfile, INTERVAL=50000):
+# Return the file with the frequency data
+def analyze(fname, INTERVAL=50000):
     # Current file is the one we are iterating over
     current_file = wave.open(fname, 'r')
     length = current_file.getnframes()
     prev_rolloff = None
     hash_dict = {}
+
+    markov_data = tm(fname) # initialize markov object
     
     # Iterate over current file 10 frames at a time
     for i in range (0, math.floor(length/INTERVAL)):
@@ -35,35 +38,17 @@ def analyze(fname, outfile, INTERVAL=50000):
         
         # write the transition if there is a previous number
         if prev_rolloff:
-            if prev_rolloff in hash_dict.keys():
-                if rolloff in hash_dict[prev_rolloff]:
-                    hash_dict[prev_rolloff][rolloff]+=1
-                else:
-                    hash_dict[prev_rolloff] = {}
-                    hash_dict[prev_rolloff][rolloff]=1
-
-            else:
-                hash_dict[prev_rolloff] = {}
-                hash_dict[prev_rolloff] = {}
-                hash_dict[prev_rolloff][rolloff]=1
+            markov_data.add_transition(prev_rolloff, rolloff)
 
         prev_rolloff = rolloff
 
-    return hash_dict
-
-def normalize(hash_matrix):
-    new_matrix = {}
-    for prev_freq in hash_matrix.keys():
-        curr_freq_data = hash_matrix[prev_freq]
-        total = sum(curr_freq_data.values())
-        new_dict = {}
-        for key in curr_freq_data.keys():
-            new_dict[key] = curr_freq_data[key]/total
-        new_matrix[prev_freq] = new_dict
-
-    return new_matrix
+    return markov_data.save() # save the associated data for that file
 
 # Generate data based on every file in the 'data' folder
-def data_gen(outfile):
+def data_gen():
+    markov_master = tm('master_data')
     for fname in os.listdir('./data'):
-        analyze(fname, outfile)
+        curr_out_data = analyze(fname)
+        markov_master.load_data(curr_out_data)
+
+    markov_master.save()
