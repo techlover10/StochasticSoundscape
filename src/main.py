@@ -29,7 +29,7 @@ while output.duration_seconds < DURATION:
     #print("selected sample: " + lib.get_sample(newsample))
     output = audio.combine_samples(output, 'samples/' + lib.get_sample(newsample))
     #print("added sample")
-    print(output.duration_seconds)
+    #print(output.duration_seconds)
 
 output.export(FILENAME, format='wav')
 
