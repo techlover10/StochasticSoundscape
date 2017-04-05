@@ -10,7 +10,7 @@ import os
 def combine_samples(acc, file2, CROSSFADE_DUR=100):
     sample2 = AudioSegment.from_wav(file2)
     output = acc.append(sample2, crossfade=CROSSFADE_DUR)
-    return acc
+    return output
 
 ## add a sample to an existing wav
 #def add_sample(fname, samplefile, CROSSFADE_DUR=100):

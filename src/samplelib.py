@@ -5,7 +5,7 @@
 
 import librosa
 import wave, struct
-import sys, os
+import sys, os, math, random
 import analyze
 
 class SampleLib:
@@ -14,7 +14,7 @@ class SampleLib:
         self.lib = {}
         for fname in os.listdir(self.directory):
             if fname[len(fname)-4:len(fname)] == '.wav':
-                classifier = analyze.sound_analyze(os.path.abspath(fname))
+                classifier = analyze.sound_analyze(os.path.abspath('samples/' + fname))
                 if classifier in self.lib:
                     self.lib[classifier].append(fname)
                 else:
@@ -25,21 +25,28 @@ class SampleLib:
         if classifier in self.lib:
             return random.choice(self.lib[classifier])
         else:
-            close_floor = list(self.lib.keys())[0]
-            close_ceil = list(self.lib.keys())[0]
-            best_est = list(self.lib.keys())[0]
-            best_delta = math.abs(classifier - best_est)
+            classifier = int(classifier)
+            close_floor = int(list(self.lib.keys())[0])
+            close_ceil = int(list(self.lib.keys())[0])
+            best_est = int(list(self.lib.keys())[0])
+            best_delta = math.fabs(int(classifier) - best_est)
             for key in self.lib.keys():
+                key = int(key)
                 if key < classifier and key > close_floor:
                     close_floor = key
                 elif key < close_ceil:
                     close_ceil = key
 
-                new_delta = math.abs(classifier - key) 
+                new_delta = math.fabs(classifier - key) 
                 if (new_delta < best_delta):
                     best_est = key
                     best_delta = new_delta
-                
+
+        #print(classifier)
+        #print(self.lib.keys())
+        #print(best_est)
+        #print(self.lib[best_est])
+        return random.choice(list(self.lib[best_est]))
 
 
                 
