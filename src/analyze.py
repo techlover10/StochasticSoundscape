@@ -10,20 +10,29 @@ import numpy
 import librosa
 from PyTransitionMatrix.Markov import TransitionMatrix as tm
 
+# This function performs the analysis of any given sound.
+# Function can be modified as desired to analyze whatever
+# feature is desired.
+def sound_analyze(fname):
+    y, sr = librosa.load(fname) # load the temp file
+    rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
+    return math.floor(numpy.average(rolloff))
+
 # Analyze a single sound file
 # Return the file with the frequency data
 def analyze(fname, INTERVAL=50000):
     # Current file is the one we are iterating over
     current_file = wave.open(fname, 'r')
     length = current_file.getnframes()
-    prev_rolloff = None
+    prev_classifier = None
     hash_dict = {}
 
+    TEMP_NAME = 'temp.wav'
     markov_data = tm(fname) # initialize markov object
     
     # Iterate over current file 10 frames at a time
     for i in range (0, math.floor(length/INTERVAL)):
-        working = wave.open('temp.wav', 'w') # open the temp file for writing
+        working = wave.open(TEMP_NAME, 'w') # open the temp file for writing
         working.setparams(current_file.getparams())
         working.setnframes(0)
         curr_data = current_file.readframes(INTERVAL)
@@ -32,15 +41,13 @@ def analyze(fname, INTERVAL=50000):
 
         # Within current 10 frames, perform analysis + write to stochastic matrix
         # This is one of the parameters that can be changed
-        y, sr = librosa.load('temp.wav') # load the temp file
-        rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
-        rolloff = math.floor(numpy.average(rolloff))
+        classifier = sound_analyze(TEMP_NAME)
         
         # write the transition if there is a previous number
-        if prev_rolloff:
-            markov_data.add_transition(prev_rolloff, rolloff)
+        if prev_classifier:
+            markov_data.add_transition(prev_classifier, classifier)
 
-        prev_rolloff = rolloff
+        prev_classifier = classifier
 
     return markov_data.save() # save the associated data for that file
 
