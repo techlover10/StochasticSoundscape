@@ -60,3 +60,4 @@ def data_gen():
             markov_master.load_data(curr_out_data)
 
     markov_master.save()
+    return markov_master # return the associated data in a markov object

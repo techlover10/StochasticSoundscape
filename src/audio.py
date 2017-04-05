@@ -7,16 +7,15 @@ from pydub import AudioSegment
 import os
 
 # combine two audio samples with a crossfade
-def combine_samples(file1, file2, CROSSFADE_DUR):
-    sample1 = AudioSegment.from_wav(file1)
-    sample2 = AudioSegment.from_wave(file2)
-    output = sample1.append(sample2, crossfade=CROSSFADE_DUR)
-    file_out = output.export('outfile.wav', format='wav')
-    return file_out
+def combine_samples(acc, file2, CROSSFADE_DUR=100):
+    sample2 = AudioSegment.from_wav(file2)
+    output = acc.append(sample2, crossfade=CROSSFADE_DUR)
+    return acc
 
-# add a sample to an existing wav
-def add_sample(fname, samplefile, CROSSFADE_DUR=100):
-    new_file = combine_samples(fname, samplefile, CROSSFADE_DUR)
-    os.rename(fname, 'old_' + fname)
-    os.rename(new_file, fname)
+## add a sample to an existing wav
+#def add_sample(fname, samplefile, CROSSFADE_DUR=100):
+#    new_file = combine_samples(fname, samplefile, CROSSFADE_DUR)[0]
+#    os.rename(fname, 'old_' + fname)
+#    os.rename(new_file, fname)
+#    return new_file[1]
 
