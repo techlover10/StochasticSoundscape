@@ -17,8 +17,6 @@ for fname in os.listdir(IN_DIR):
         length = current_file.getnframes()
         for i in range (0, math.floor(length/INTERVAL)):
             counter+=1
-            print(i)
-            print("running")
             working = wave.open(OUT_DIR + '/' + fname[0:len(fname)-4] + '_s' + str(counter) + '.wav', 'w') # open the sample file
             working.setparams(current_file.getparams())
             working.setnframes(0)
