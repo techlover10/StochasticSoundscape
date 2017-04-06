@@ -5,20 +5,27 @@
 
 import librosa
 import wave, struct
+import json
 import sys, os, math, random
 import analyze
 
 class SampleLib:
-    def __init__(self, dir):
+    def __init__(self, dir, analyzeall=True):
         self.directory = dir
         self.lib = {}
-        for fname in os.listdir(self.directory):
-            if fname[len(fname)-4:len(fname)] == '.wav':
-                classifier = analyze.sound_analyze(os.path.abspath('samples/' + fname))
-                if classifier in self.lib:
-                    self.lib[classifier].append(fname)
-                else:
-                    self.lib[classifier] = [fname]
+        if analyzeall:
+            for fname in os.listdir(self.directory):
+                if fname[len(fname)-4:len(fname)] == '.wav':
+                    classifier = str(analyze.sound_analyze(os.path.abspath('samples/' + fname)))
+                    if classifier in self.lib:
+                        self.lib[classifier].append(fname)
+                    else:
+                        self.lib[classifier] = [fname]
+
+            data = json.dumps(self.lib)
+            open(os.path.abspath('samples/lib.json'), 'w').write(data)
+        else:
+            self.lib = json.loads(open(os.path.abspath('samples/lib.json')).read())
 
     # Given a classifier, returns the file name of a sample which most closely matches the classifier
     def get_sample(self, classifier):
@@ -46,7 +53,7 @@ class SampleLib:
         #print(self.lib.keys())
         #print(best_est)
         #print(self.lib[best_est])
-        return random.choice(list(self.lib[best_est]))
+        return random.choice(list(self.lib[str(best_est)]))
 
 
                 

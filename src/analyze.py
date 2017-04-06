@@ -52,12 +52,18 @@ def analyze(fname, INTERVAL=50000):
     return markov_data.save() # save the associated data for that file
 
 # Generate data based on every file in the 'data' folder
-def data_gen():
+def data_gen(SOUND_INTERVAL=50000):
     markov_master = tm('master_data')
     for fname in os.listdir('./data'):
         if fname[len(fname)-4:len(fname)] == '.wav':
-            curr_out_data = analyze(os.path.abspath('data/' + fname))
+            curr_out_data = analyze(os.path.abspath('data/' + fname), INTERVAL=SOUND_INTERVAL)
             markov_master.load_data(curr_out_data)
 
     markov_master.save()
     return markov_master # return the associated data in a markov object
+
+# Load existing data
+def load_existing():
+    markov_master = tm()
+    markov_master.load_data('master_data.mkv')
+    return markov_master

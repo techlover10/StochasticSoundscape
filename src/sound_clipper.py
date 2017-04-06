@@ -8,7 +8,7 @@ import wave, struct
 
 IN_DIR = './long_sounds'
 OUT_DIR = './samples'
-INTERVAL = 50000
+INTERVAL = 5000
 counter = 0
 
 for fname in os.listdir(IN_DIR):
