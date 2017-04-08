@@ -15,6 +15,9 @@ class SampleLib:
         self.lib = {}
         if analyzeall:
             for fname in os.listdir(self.directory):
+                sys.stdout.write('\r')
+                sys.stdout.write("classifying " + fname)
+                sys.stdout.flush()
                 if fname[len(fname)-4:len(fname)] == '.wav':
                     classifier = str(analyze.sound_analyze(os.path.abspath('samples/' + fname)))
                     if classifier in self.lib:
@@ -32,13 +35,13 @@ class SampleLib:
         if classifier in self.lib:
             return random.choice(self.lib[classifier])
         else:
-            classifier = int(classifier)
-            close_floor = int(list(self.lib.keys())[0])
-            close_ceil = int(list(self.lib.keys())[0])
-            best_est = int(list(self.lib.keys())[0])
-            best_delta = math.fabs(int(classifier) - best_est)
+            classifier = float(classifier)
+            close_floor = float(list(self.lib.keys())[0])
+            close_ceil = float(list(self.lib.keys())[0])
+            best_est = float(list(self.lib.keys())[0])
+            best_delta = math.fabs(float(classifier) - best_est)
             for key in self.lib.keys():
-                key = int(key)
+                key = float(key)
                 if key < classifier and key > close_floor:
                     close_floor = key
                 elif key < close_ceil:
@@ -53,7 +56,7 @@ class SampleLib:
         #print(self.lib.keys())
         #print(best_est)
         #print(self.lib[best_est])
-        return random.choice(list(self.lib[str(best_est)]))
+        return random.choice(list(self.lib[str(int(best_est))]))
 
 
                 

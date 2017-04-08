@@ -12,12 +12,13 @@ from pydub import AudioSegment
 import audio
 import sys
 
-INTERVAL = 50000 # sample interval
+INTERVAL = 2500 # sample interval
 
 if (len(sys.argv) <= 1) or not sys.argv[1] == 'quick':
     markov_data = analyze.data_gen(INTERVAL)
     lib = slib('./samples')
 else:
+    print("running quickgen")
     markov_data = analyze.load_existing()
     lib = slib('./samples', analyzeall=False)
 
@@ -34,10 +35,12 @@ output = AudioSegment.from_wav('samples/' + lib.get_sample(newsample))
 while output.duration_seconds < DURATION:
     newsample = markov_data.get_next_outcome()
     #print("selected sample: " + lib.get_sample(newsample))
-    output = audio.combine_samples(output, 'samples/' + lib.get_sample(newsample), CROSSFADE_DUR=50)
+    output = audio.combine_samples(output, 'samples/' + lib.get_sample(newsample), CROSSFADE_DUR=3)
     #print("added sample")
     #print(output.duration_seconds)
 
+print()
+print('file saved! ' + FILENAME)
 output.export(FILENAME, format='wav')
 
 

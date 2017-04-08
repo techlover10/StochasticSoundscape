@@ -15,8 +15,10 @@ from PyTransitionMatrix.Markov import TransitionMatrix as tm
 # feature is desired.
 def sound_analyze(fname):
     y, sr = librosa.load(fname) # load the temp file
-    rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
-    return math.floor(numpy.average(rolloff))
+    #ft = librosa.feature.zero_crossing_rate(y)
+    #return numpy.average(ft.transpose())
+    feature = librosa.feature.spectral_centroid(y=y, sr=sr)
+    return math.floor(numpy.average(feature))
 
 # Analyze a single sound file
 # Return the file with the frequency data
@@ -30,8 +32,12 @@ def analyze(fname, INTERVAL=50000):
     TEMP_NAME = 'temp.wav'
     markov_data = tm(fname) # initialize markov object
     
-    # Iterate over current file 10 frames at a time
+    # Iterate over current file INTERVAL frames at a time
+    total = math.floor(length/INTERVAL)
     for i in range (0, math.floor(length/INTERVAL)):
+        sys.stdout.write('\r')
+        sys.stdout.write('frame ' + str(i) + ' of ' + str(total))
+        sys.stdout.flush()
         working = wave.open(TEMP_NAME, 'w') # open the temp file for writing
         working.setparams(current_file.getparams())
         working.setnframes(0)
