@@ -22,7 +22,7 @@ else:
     markov_data = analyze.load_existing()
     lib = slib('./samples', analyzeall=False)
 
-DURATION = 35 # desired soundscape duration in seconds
+DURATION = 60 # desired soundscape duration in seconds
 FILENAME = 'soundscape.wav' # output file name
 
 markov_data.initialize_chain() # initialize data to follow chain

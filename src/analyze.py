@@ -55,6 +55,7 @@ def analyze(fname, INTERVAL=50000):
 
         prev_classifier = classifier
 
+    os.remove(TEMP_NAME)
     return markov_data.save() # save the associated data for that file
 
 # Generate data based on every file in the 'data' folder
