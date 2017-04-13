@@ -1,10 +1,10 @@
-# StochasticSoundscape
+# Stochastic Soundscape
 Stochastic Soundscape program which probabilistically generates random soundscapes based on input data and a set of samples.
 
 ## Important notes
 This program is only compatible with .wav files - future updates may extend compatibility to other audio files, but .wav is the most universal and for this reason I have restricted it to only recognize these files.  Those who wish to modify it to include compatibility with other files may do so at their own risk.  In this documentation, "any audio file" refers only to compatible .wav files.
 
-**KNOWN ISSUE** Throughout my use of this program I have occasionally encountered .wav files with corrupted metadata which WILL cause this program to freeze.  There is nothing I can do about this.  To use these files with Stochastic Soundscape, the following steps must be performed:
+**KNOWN ISSUE** - Throughout my use of this program I have occasionally encountered .wav files with corrupted metadata which WILL cause this program to freeze.  There is nothing I can do about this.  To use these files with Stochastic Soundscape, the following steps must be performed:
 - Download [Audacity](http://www.audacityteam.org/) if you do not already have it.
 - Open the file in Audacity
 - Go to File -> Export and save the file again as a .wav file
