@@ -6,9 +6,10 @@
 import sys, os, math
 import wave, struct
 
+INTERVAL = 2500 # Adjust this to change the sample length
+
 IN_DIR = './long_sounds'
 OUT_DIR = './samples'
-INTERVAL = 2500
 counter = 0
 
 for fname in os.listdir(IN_DIR):
