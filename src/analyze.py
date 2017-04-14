@@ -20,6 +20,14 @@ def sound_analyze(fname):
     feature = librosa.feature.spectral_centroid(y=y, sr=sr)
     return math.floor(numpy.average(feature))
 
+# This function uses Librosa's onset detection to find
+# impulses in the sound, and returns an array of positions
+# in frames
+def pulse_detect(fname):
+    y, sr = librosa.load(fname)
+    array = librosa.onset.onset_detect(y, sr)
+    return array
+
 # Analyze a single sound file
 # Return the file with the frequency data
 def analyze(fname, INTERVAL=50000):
@@ -33,17 +41,21 @@ def analyze(fname, INTERVAL=50000):
     markov_data = tm(fname) # initialize markov object
     
     # Iterate over current file INTERVAL frames at a time
-    total = math.floor(length/INTERVAL)
-    for i in range (0, math.floor(length/INTERVAL)):
+    pulse_loc = pulse_detect(fname)
+    prev_point = 0
+    for i in range (0, len(pulse_loc)):
+        pulse_point = pulse_loc[i]
+        read_length = pulse_point - prev_point
         sys.stdout.write('\r')
-        sys.stdout.write('frame ' + str(i) + ' of ' + str(total))
+        sys.stdout.write('frame ' + str(i) + ' of ' + str(len(pulse_loc)))
         sys.stdout.flush()
         working = wave.open(TEMP_NAME, 'w') # open the temp file for writing
         working.setparams(current_file.getparams())
         working.setnframes(0)
-        curr_data = current_file.readframes(INTERVAL)
+        curr_data = current_file.readframes(read_length)
         working.writeframes(curr_data) # save the working frames to the temp file
         working.close()
+        prev_point = pulse_point
 
         # Within current 10 frames, perform analysis + write to stochastic matrix
         # This is one of the parameters that can be changed
