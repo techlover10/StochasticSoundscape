@@ -43,7 +43,7 @@ def analyze(fname, INTERVAL=50000):
     # Iterate over current file INTERVAL frames at a time
     pulse_loc = pulse_detect(fname)
     prev_point = 0
-    for i in range (0, len(pulse_loc)):
+    for i in range (0, len(pulse_loc)-1):
         pulse_point = pulse_loc[i]
         read_length = pulse_point - prev_point
         sys.stdout.write('\r')

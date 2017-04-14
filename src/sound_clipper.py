@@ -18,7 +18,8 @@ for fname in os.listdir(IN_DIR):
         current_file = wave.open(IN_DIR + '/' + fname, 'r')
         pulse_loc = analyze.pulse_detect(IN_DIR + '/' + fname)
         prev_point = 0
-        for pulse_point in pulse_loc:
+        for i in range (0, len(pulse_loc)):
+            pulse_point = pulse_loc[i]
             read_length = pulse_point - prev_point
             counter+=1
             working = wave.open(OUT_DIR + '/' + fname[0:len(fname)-4] + '_s' + str(counter) + '.wav', 'w') # open the sample file
