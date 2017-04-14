@@ -44,7 +44,7 @@ def analyze(fname, INTERVAL=50000):
     pulse_loc = pulse_detect(fname)
     prev_point = 0
     for i in range (0, len(pulse_loc)-1):
-        pulse_point = pulse_loc[i]
+        pulse_point = pulse_loc[i] * 1024 # 512 default hop length * halved librosa sample rate
         read_length = pulse_point - prev_point
         sys.stdout.write('\r')
         sys.stdout.write('frame ' + str(i) + ' of ' + str(len(pulse_loc)))

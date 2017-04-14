@@ -19,7 +19,7 @@ for fname in os.listdir(IN_DIR):
         pulse_loc = analyze.pulse_detect(IN_DIR + '/' + fname)
         prev_point = 0
         for i in range (0, len(pulse_loc)):
-            pulse_point = pulse_loc[i]
+            pulse_point = pulse_loc[i] * 1024 # 1024 = default hop length of 512 * sample rate which is halved
             read_length = pulse_point - prev_point
             counter+=1
             working = wave.open(OUT_DIR + '/' + fname[0:len(fname)-4] + '_s' + str(counter) + '.wav', 'w') # open the sample file
