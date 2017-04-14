@@ -25,7 +25,8 @@ def sound_analyze(fname):
 # in frames
 def pulse_detect(fname):
     y, sr = librosa.load(fname)
-    array = librosa.onset.onset_detect(y, sr)
+    #array = librosa.onset.onset_detect(y, sr)
+    array = librosa.beat.beat_track(y,sr)[1]
     return array
 
 # Analyze a single sound file
