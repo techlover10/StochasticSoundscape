@@ -23,7 +23,7 @@ print("running quickgen")
 markov_data = analyze.load_existing()
 lib = slib('./samples', analyzeall=False)
 
-DURATION = 480 # desired soundscape duration in seconds
+DURATION = 240 # desired soundscape duration in seconds
 FILENAME = 'soundscape.wav' # output file name
 
 markov_data.initialize_chain() # initialize data to follow chain

@@ -9,29 +9,38 @@ import wave, struct
 import numpy
 import librosa
 from PyTransitionMatrix.Markov import TransitionMatrix as tm
+import settings
 
 # This function performs the analysis of any given sound.
 # Function can be modified as desired to analyze whatever
 # feature is desired.
-def sound_analyze(fname):
+def sound_analyze(fname, mode):
     y, sr = librosa.load(fname) # load the temp file
-    #ft = librosa.feature.zero_crossing_rate(y)
-    #return numpy.average(ft.transpose())
-    feature = librosa.feature.spectral_centroid(y=y, sr=sr)
-    return math.floor(numpy.average(feature))
+    if mode == 'rolloff':
+        feature = librosa.feature.spectral_rolloff(y=y, sr=sr)
+        return math.floor(numpy.average(feature))
+    elif mode == 'spectral_centroid':
+        feature = librosa.feature.spectral_centroid(y=y, sr=sr)
+        return math.floor(numpy.average(feature))
+    elif mode == 'zero_crossing':
+        ft = librosa.feature.zero_crossing_rate(y)
+        return numpy.average(ft.transpose())
 
 # This function uses Librosa's onset detection to find
 # impulses in the sound, and returns an array of positions
 # in frames
-def pulse_detect(fname):
+def pulse_detect(fname, mode):
     y, sr = librosa.load(fname)
-    #array = librosa.onset.onset_detect(y, sr)
-    array = librosa.beat.beat_track(y,sr)[1]
-    return array
+    if mode == 'onset':
+        array = librosa.onset.onset_detect(y, sr)
+        return array
+    elif mode == 'beat_track':
+        array = librosa.beat.beat_track(y,sr)[1]
+        return array
 
 # Analyze a single sound file
 # Return the file with the frequency data
-def analyze(fname, INTERVAL=50000):
+def analyze(fname):
     # Current file is the one we are iterating over
     current_file = wave.open(fname, 'r')
     length = current_file.getnframes()
@@ -42,7 +51,7 @@ def analyze(fname, INTERVAL=50000):
     markov_data = tm(fname) # initialize markov object
     
     # Iterate over current file INTERVAL frames at a time
-    pulse_loc = pulse_detect(fname)
+    pulse_loc = pulse_detect(fname, settings.PULSE_TYPE)
     prev_point = 0
     for i in range (0, len(pulse_loc)-1):
         pulse_point = pulse_loc[i] * 1024 # 512 default hop length * halved librosa sample rate
@@ -72,11 +81,11 @@ def analyze(fname, INTERVAL=50000):
     return markov_data.save() # save the associated data for that file
 
 # Generate data based on every file in the 'data' folder
-def data_gen(SOUND_INTERVAL=50000):
+def data_gen():
     markov_master = tm('master_data')
     for fname in os.listdir('./data'):
         if fname[len(fname)-4:len(fname)] == '.wav':
-            curr_out_data = analyze(os.path.abspath('data/' + fname), INTERVAL=SOUND_INTERVAL)
+            curr_out_data = analyze(os.path.abspath('data/' + fname))
             markov_master.load_data(curr_out_data)
 
     markov_master.save()
