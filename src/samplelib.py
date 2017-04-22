@@ -8,6 +8,7 @@ import wave, struct
 import json
 import sys, os, math, random
 import analyze
+import settings
 
 class SampleLib:
     def __init__(self, dir, analyzeall=True):
@@ -19,7 +20,7 @@ class SampleLib:
                 sys.stdout.write("classifying " + fname)
                 sys.stdout.flush()
                 if fname[len(fname)-4:len(fname)] == '.wav':
-                    classifier = str(analyze.sound_analyze(os.path.abspath('samples/' + fname)))
+                    classifier = str(analyze.sound_analyze(os.path.abspath('samples/' + fname), settings.ANALYSIS_MODE))
                     if classifier in self.lib:
                         self.lib[classifier].append(fname)
                     else:

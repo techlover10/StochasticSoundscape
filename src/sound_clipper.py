@@ -6,8 +6,7 @@
 import sys, os, math
 import wave, struct
 import analyze
-
-INTERVAL = 2500 # Adjust this to change the sample length
+import settings
 
 IN_DIR = './long_sounds'
 OUT_DIR = './samples'
@@ -16,7 +15,7 @@ counter = 0
 for fname in os.listdir(IN_DIR):
     if fname[len(fname)-4:len(fname)] == '.wav':
         current_file = wave.open(IN_DIR + '/' + fname, 'r')
-        pulse_loc = analyze.pulse_detect(IN_DIR + '/' + fname)
+        pulse_loc = analyze.pulse_detect(IN_DIR + '/' + fname, settings.PULSE_TYPE)
         prev_point = 0
         for i in range (0, len(pulse_loc)):
             pulse_point = pulse_loc[i] * 1024 # 1024 = default hop length of 512 * sample rate which is halved

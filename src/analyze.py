@@ -69,7 +69,7 @@ def analyze(fname):
 
         # Within current 10 frames, perform analysis + write to stochastic matrix
         # This is one of the parameters that can be changed
-        classifier = sound_analyze(TEMP_NAME)
+        classifier = sound_analyze(TEMP_NAME, settings.ANALYSIS_MODE)
         
         # write the transition if there is a previous number
         if prev_classifier:
