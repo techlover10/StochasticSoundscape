@@ -89,4 +89,9 @@ ENV/
 .ropeproject
 
 # Audio files
-.wav
+*.wav
+*.mp3
+
+# Data files
+*.mkv
+*.json
