@@ -8,6 +8,7 @@ import sys, os
 import wave, struct
 import numpy
 import librosa
+from pydub import AudioSegment, scipy_effects
 from PyTransitionMatrix.Markov import TransitionMatrix as tm
 import settings
 
@@ -38,9 +39,23 @@ def pulse_detect(fname, mode):
         array = librosa.beat.beat_track(y,sr)[1]
         return array
 
+def analyze(fname):
+    if settings.FREQUENCY_SPLIT:
+        curr_file = AudioSegment.from_file(fname)
+        low_seg = scipy_effects.low_pass_filter(curr_file, settings.LOW_FREQUENCY_LIM).export(fname + '_low.wav', 'wav')
+        mid_seg = scipy_effects.band_pass_filter(curr_file, settings.LOW_FREQUENCY_LIM, settings.HIGH_FREQUENCY_LIM).export(fname + '_mid.wav', 'wav')
+        high_seg = scipy_effects.high_pass_filter(curr_file, settings.HIGH_FREQUENCY_LIM).export(fname + '_high.wav', 'wav')
+        info = {"low":analyze_single(fname + '_low.wav'), "mid": analyze_single(fname + '_mid.wav'), "high": analyze_single(fname + '_high.wav')}
+        os.remove(fname + '_low.wav')
+        os.remove(fname + '_mid.wav')
+        os.remove(fname + '_high.wav')
+        return info
+    else:
+        return analyze_single(fname)
+
 # Analyze a single sound file
 # Return the file with the frequency data
-def analyze(fname):
+def analyze_single(fname):
     # Current file is the one we are iterating over
     current_file = wave.open(fname, 'r')
     length = current_file.getnframes()
@@ -80,8 +95,29 @@ def analyze(fname):
     os.remove(TEMP_NAME)
     return markov_data.save() # save the associated data for that file
 
-# Generate data based on every file in the 'data' folder
 def data_gen():
+    if not settings.FREQUENCY_SPLIT:
+        return data_gen_single()
+    else:
+        markov_master_low = tm('master_data_low')
+        markov_master_mid = tm('master_data_mid')
+        markov_master_high = tm('master_data_high')
+        for fname in os.listdir('./data'):
+            if fname[len(fname)-4:len(fname)] == '.wav':
+                curr_out_data = analyze(os.path.abspath('data/' + fname))
+                markov_master_low.load_data(curr_out_data["low"])
+                markov_master_mid.load_data(curr_out_data["mid"])
+                markov_master_high.load_data(curr_out_data["high"])
+
+        markov_master_low.save()
+        markov_master_mid.save()
+        markov_master_high.save()
+
+        return {"low": markov_master_low, "mid": markov_master_mid, "high": markov_master_high}
+
+
+# Generate data based on every file in the 'data' folder, no band analysis
+def data_gen_single():
     markov_master = tm('master_data')
     for fname in os.listdir('./data'):
         if fname[len(fname)-4:len(fname)] == '.wav':
@@ -93,6 +129,15 @@ def data_gen():
 
 # Load existing data
 def load_existing():
-    markov_master = tm()
-    markov_master.load_data('master_data.mkv')
-    return markov_master
+    if not settings.FREQUENCY_SPLIT:
+        markov_master = tm()
+        markov_master.load_data('master_data.mkv')
+        return markov_master
+    else:
+        markov_master_low = tm()
+        markov_master_mid = tm()
+        markov_master_high = tm()
+        markov_master_low.load_data('master_data_low.mkv')
+        markov_master_mid.load_data('master_data_mid.mkv')
+        markov_master_high.load_data('master_data_high.mkv')
+        return {"low": markov_master_low, "mid": markov_master_mid, "high": markov_master_high}

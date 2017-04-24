@@ -31,8 +31,18 @@ class SampleLib:
         else:
             self.lib = json.loads(open(os.path.abspath('samples/lib.json')).read())
 
-    # Given a classifier, returns the file name of a sample which most closely matches the classifier
     def get_sample(self, classifier):
+        if not settings.FREQUENCY_SPLIT:
+            return self.get_single_sample(classifier)
+        else:
+            ret_sample = {}
+            for band, target_classifier in classifier.items():
+                ret_sample[band] = self.get_single_sample(target_classifier)
+            return ret_sample
+
+
+    # Given a classifier, returns the file name of a sample which most closely matches the classifier
+    def get_single_sample(self, classifier):
         if classifier in self.lib:
             return random.choice(self.lib[classifier])
         else:

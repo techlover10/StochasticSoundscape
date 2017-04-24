@@ -6,8 +6,7 @@
 
 import analyze
 
-INTERVAL = 2500 # sample interval
 
-markov_data = analyze.data_gen(INTERVAL)
+markov_data = analyze.data_gen()
 
 

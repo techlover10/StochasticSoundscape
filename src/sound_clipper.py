@@ -6,14 +6,14 @@
 import sys, os, math
 import wave, struct
 import analyze
-import settings
+import settings, audio
 
 IN_DIR = './long_sounds'
 OUT_DIR = './samples'
 counter = 0
 
 for fname in os.listdir(IN_DIR):
-    if fname[len(fname)-4:len(fname)] == '.wav':
+    if fname.endswith('.wav'):
         current_file = wave.open(IN_DIR + '/' + fname, 'r')
         pulse_loc = analyze.pulse_detect(IN_DIR + '/' + fname, settings.PULSE_TYPE)
         prev_point = 0
@@ -28,5 +28,11 @@ for fname in os.listdir(IN_DIR):
             working.writeframes(curr_data) # save the working frames to the temp file
             working.close()
             prev_point = pulse_point
+
+if settings.FREQUENCY_SPLIT:
+    for fname in os.listdir(OUT_DIR):
+        if fname.endswith('wav'):
+            audio.split_file(OUT_DIR + '/' + fname)
+            os.remove(OUT_DIR + '/' + fname)
 
 
