@@ -17,6 +17,7 @@ The new .wav file should have proper metadata.  I have yet to find an explanatio
 - scipy
 - wave
 - [Librosa](http://nbviewer.jupyter.org/github/librosa/librosa/blob/master/examples/LibROSA%20demo.ipynb)
+- ffmpeg (Linux library - for Ubuntu, this can be obtained with `sudo apt-get install ffmpeg`)
 - (This program has only been tested on Ubuntu 16.04 - other platforms should be supported but have not been tested)
 
 ## Getting Started
