@@ -17,6 +17,9 @@ VERBOSE = False
 # -------------SOUND ANALYSIS SETTINGS---------------------
 # Sounds can be analyzed based on a number of different features.
 #
+# 'all' performs all of the following analyses, and uses a 
+# combination of them to determine similarity.
+#
 # 'rolloff' analyzes sounds based on spectral rolloff, a feature
 # which is based on how much energy is in which frequency ranges
 # for the sound.
@@ -28,7 +31,7 @@ VERBOSE = False
 # signal changes - that is, the rate at which the signal
 # changes from positive to negative.
 
-ANALYSIS_MODE = 'rolloff'
+ANALYSIS_MODE = 'all'
 
 # -------------PULSE DETECTION SETTINGS--------------------
 # Sounds will be analyzed based on detecting spikes in the 
@@ -60,4 +63,8 @@ LOW_FREQUENCY_LIM = 3000
 # Set the lower limit for the high-frequency band, in hz
 HIGH_FREQUENCY_LIM = 7000
 
+########### DEV SETTINGS: USE CAUTION WHEN MODIFYING ###########
 
+# Set the delimeter used to separate multiple features in 
+# category keys
+DELIMITER = ';'

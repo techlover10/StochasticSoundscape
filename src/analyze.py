@@ -26,6 +26,17 @@ def sound_analyze(fname, mode):
     elif mode == 'zero_crossing':
         ft = librosa.feature.zero_crossing_rate(y)
         return numpy.average(ft.transpose())
+    elif mode == 'all':
+        rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
+        rolloff_key = math.floor(numpy.average(rolloff))
+        centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
+        centroid_key = math.floor(numpy.average(centroid))
+        crossing_rate = librosa.feature.zero_crossing_rate(y)
+        crossing_rate_key = numpy.average(crossing_rate.transpose())
+
+        key = str(rolloff_key) + settings.DELIMITER + str(centroid_key) + settings.DELIMITER + str(crossing_rate_key)
+        return key
+        
 
 # This function uses Librosa's onset detection to find
 # impulses in the sound, and returns an array of positions
@@ -77,8 +88,8 @@ def analyze_single(fname):
     for i in range (0, len(pulse_loc)-1):
         pulse_point = pulse_loc[i] * 1024 # 512 default hop length * halved librosa sample rate
         read_length = pulse_point - prev_point
-        sys.stdout.write('\r')
-        sys.stdout.write('frame ' + str(i) + ' of ' + str(len(pulse_loc)))
+        sys.stdout.write('\r' + (' '*int(os.popen('stty size', 'r').read().split()[1])))
+        sys.stdout.write('\rframe ' + str(i) + ' of ' + str(len(pulse_loc)))
         sys.stdout.flush()
         working = wave.open(TEMP_NAME, 'w') # open the temp file for writing
         working.setparams(current_file.getparams())
