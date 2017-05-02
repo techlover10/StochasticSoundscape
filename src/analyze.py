@@ -35,20 +35,26 @@ def pulse_detect(fname, mode):
     if mode == 'onset':
         array = librosa.onset.onset_detect(y, sr)
         return array
-    elif mode == 'beat_track':
+    elif mode == 'beat':
         array = librosa.beat.beat_track(y,sr)[1]
         return array
 
 def analyze(fname):
     if settings.FREQUENCY_SPLIT:
         curr_file = AudioSegment.from_file(fname)
+
         low_seg = scipy_effects.low_pass_filter(curr_file, settings.LOW_FREQUENCY_LIM).export(fname + '_low.wav', 'wav')
         mid_seg = scipy_effects.band_pass_filter(curr_file, settings.LOW_FREQUENCY_LIM, settings.HIGH_FREQUENCY_LIM).export(fname + '_mid.wav', 'wav')
         high_seg = scipy_effects.high_pass_filter(curr_file, settings.HIGH_FREQUENCY_LIM).export(fname + '_high.wav', 'wav')
-        info = {"low":analyze_single(fname + '_low.wav'), "mid": analyze_single(fname + '_mid.wav'), "high": analyze_single(fname + '_high.wav')}
+
+        info = {"low": analyze_single(fname + '_low.wav'), 
+                "mid": analyze_single(fname + '_mid.wav'), 
+                "high": analyze_single(fname + '_high.wav')}
+
         os.remove(fname + '_low.wav')
         os.remove(fname + '_mid.wav')
         os.remove(fname + '_high.wav')
+
         return info
     else:
         return analyze_single(fname)

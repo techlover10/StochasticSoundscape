@@ -60,12 +60,17 @@ if settings.FREQUENCY_SPLIT:
         if i.duration_seconds > max_len:
             max_len = i.duration_seconds
     
-    newfile = AudioSegment.silent(duration=max_len)
+    util.debug_print(max_len)
+    newfile = AudioSegment.silent(duration=max_len*1000, frame_rate=output['low'].frame_rate) # length in milliseconds
     for i in output.values():
-        newfile.overlay(i)
+        util.debug_print(i)
+        newfile = newfile.overlay(i)
+
+    #if settings.VERBOSE:
+    #    for key, val in output.items():
+    #        output[key].export(settings.FILENAME + key, format='wav')
 
     output = newfile
-
 
 
 print()

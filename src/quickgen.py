@@ -76,8 +76,6 @@ if settings.FREQUENCY_SPLIT:
 
     output = newfile
 
-
-
 print()
 output.export(settings.FILENAME, format='wav')
 print('file saved! ' + settings.FILENAME)

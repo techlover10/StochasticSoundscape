@@ -46,28 +46,34 @@ class SampleLib:
         if classifier in self.lib:
             return random.choice(self.lib[classifier])
         else:
-            classifier = float(classifier)
-            close_floor = float(list(self.lib.keys())[0])
-            close_ceil = float(list(self.lib.keys())[0])
-            best_est = float(list(self.lib.keys())[0])
-            best_delta = math.fabs(float(classifier) - best_est)
+            close_floor = list(self.lib.keys())[0]
+            close_ceil = list(self.lib.keys())[0]
+            best_est = list(self.lib.keys())[0]
+            best_delta = self.classifier_dist(classifier, best_est)
             for key in self.lib.keys():
-                key = float(key)
-                if key < classifier and key > close_floor:
+                if self.classifier_compare(key, classifier) < 0 and self.classifier_compare(key, close_floor) > 0:
                     close_floor = key
-                elif key < close_ceil:
+                elif self.classifier_compare(key, close_ceil) < 0:
                     close_ceil = key
 
-                new_delta = math.fabs(classifier - key) 
+                new_delta = self.classifier_dist(classifier, key) 
                 if (new_delta < best_delta):
                     best_est = key
                     best_delta = new_delta
 
-        #print(classifier)
-        #print(self.lib.keys())
-        #print(best_est)
-        #print(self.lib[best_est])
-        return random.choice(list(self.lib[str(int(best_est))]))
+        return random.choice(list(self.lib[best_est]))
+
+    # Distance function on classifier keys
+    def classifier_dist(self, c1, c2):
+        return math.fabs(float(c2) - float(c1))
+
+    # Comparison functino on classifier keys
+    def classifier_compare(self, c1, c2):
+        if float(c2) < float(c1):
+            return 1
+        if float(c1) < float(c2):
+            return -1
+        return 0
 
 
                 

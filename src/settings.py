@@ -43,7 +43,7 @@ ANALYSIS_MODE = 'rolloff'
 # some amount of inference based on the overall tempo of the 
 # beats in the sound file.
 
-PULSE_TYPE = 'onset'
+PULSE_TYPE = 'beat'
 
 # -------------FREQUENCY SEPARATION SETTINGS---------------
 # Stochastic Soundscape is able to analyze sounds and separate
