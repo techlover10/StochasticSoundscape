@@ -93,5 +93,4 @@ ENV/
 *.mp3
 
 # Data files
-*.mkv
 *.json
