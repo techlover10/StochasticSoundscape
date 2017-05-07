@@ -1,0 +1,2 @@
+# Generated Markov data will be placed here
+# Files you want to save can be placed in this directory as well

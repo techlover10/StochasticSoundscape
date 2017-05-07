@@ -1,0 +1,3 @@
+# Folder for all audio samples
+# Samples generated from sound_clipper will be placed here
+# Additional samples can be added to this folder
