@@ -25,6 +25,7 @@ def generate():
     
     FILENAME = sys.argv[1] if len(sys.argv) > 1 else settings.FILENAME
     
+    print()
     print("Generating soundscape...")
     markov_data = analyze.load_existing()
     lib = slib('../data/samples', analyzeall=False)
