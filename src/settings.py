@@ -8,7 +8,7 @@
 # Set the duration for the output soundscape, in seconds
 DURATION = 30
 
-# Set the file name for the soundscape
+# Set the default file name for the soundscape
 FILENAME = 'halo-new-analysis.wav'
 
 # Set whether detailed prints show

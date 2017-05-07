@@ -21,6 +21,8 @@ if not os.path.isfile('../data/samples/lib.json'):
     print("error: sample directory has not been analyzed!  use 'libgen.py' to analyze samples before running quickgen.")
     exit()
 
+FILENAME = sys.argv[1] if len(sys.argv) > 1 else settings.FILENAME
+
 print("running quickgen")
 markov_data = analyze.load_existing()
 lib = slib('../data/samples', analyzeall=False)
@@ -77,8 +79,8 @@ if settings.FREQUENCY_SPLIT:
     output = newfile
 
 print()
-output.export('../data/generated_sound/' + settings.FILENAME, format='wav')
-print('file saved! ' + settings.FILENAME)
+output.export('../data/generated_sound/' + FILENAME, format='wav')
+print('file saved! ' + FILENAME)
 
 
 #markov_data.initialize_chain() # initialize data to follow chain
