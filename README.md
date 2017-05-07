@@ -15,7 +15,6 @@ The new .wav file should have proper metadata.  I have yet to find an explanatio
 - Python 3.5
 - [pydub](https://github.com/jiaaro/pydub)
 - scipy
-- wave
 - [Librosa](http://nbviewer.jupyter.org/github/librosa/librosa/blob/master/examples/LibROSA%20demo.ipynb)
 - ffmpeg (Linux library - for Ubuntu, this can be obtained with `sudo apt-get install ffmpeg`)
 - (This program has only been tested on Ubuntu 16.04 - other platforms should be supported but have not been tested)
@@ -23,14 +22,19 @@ The new .wav file should have proper metadata.  I have yet to find an explanatio
 ## Getting Started
 Once the dependencies are installed, and the repository is cloned, you are ready to begin generating soundscapes!
 
+To install on a standard Ubuntu distro, you should be able to run the following commands:
+- `sudo apt-get install python3`
+- `sudo pip3 install -r requirements.txt`
+- `sudo apt-get install ffmpeg
+
 ### Usage
 Stochastic Soundscape uses two types of source material, **structural** and **samples**.  **Structural** data is analyzed to generate the stochastic transition matrix from which the **samples** will be assembled.
 
 #### Quick Start
-Simply place structural material in the `data/` folder, and a collection of sound samples in the `samples/` folder (this works better with short samples).  Then, run ./main.py (on a Bash terminal) or `python3 main.py` (on any system with the proper dependencies installed, in theory - again, this is untested).
+Simply place structural material in the `data/structural` folder, and a collection of sound samples in the `data/samples/` folder (this works better with short samples).  Then, run ./main.py (on a Bash terminal) or `python3 main.py` (on any system with the proper dependencies installed, in theory - again, this is untested).
 
 #### Sound Clipper
-Don't have enough short samples?  No problem.  Stochastic Soundscape includes a script which allows samples to be generated from any longer source audio file.  Simply copy any audio files into the folder `long_samples/` and run `./sound_clipper.py` (or `python3 sound_clipper.py`).  This will chop the audio into tiny samples and place them in the `samples/` folder.  To change the sample clipping interval, change the value of `INTERVAL` in the file `sample_clipper.py`.
+Don't have enough short samples?  No problem.  Stochastic Soundscape includes a script which allows samples to be generated from any longer source audio file.  Simply copy any audio files into the folder `data/sound_clipper_sources/` and run `./sound_clipper.py` (or `python3 sound_clipper.py`).  This will chop the audio into tiny samples and place them in the `samples/` folder.  To change the sample clipping interval, change the value of `INTERVAL` in the file `sample_clipper.py`.
 
 #### Quickgen
 `main.py` runs the structural analysis, the sample analysis, and the generation process.  Each of these can be run individually with `runanalysis.py`, `libgen.py`, and `quickgen.py`.  For example, if you've changed the sample set but you have not changed your data, you might wish to run `libgen.py` and `quickgen.py` to save time.  
