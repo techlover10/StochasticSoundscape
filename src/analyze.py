@@ -25,14 +25,14 @@ def sound_analyze(fname, mode):
         return math.floor(numpy.average(feature))
     elif mode == 'zero_crossing':
         ft = librosa.feature.zero_crossing_rate(y)
-        return numpy.average(ft.transpose())
+        return int(math.ceil(numpy.average(ft.transpose())*100))
     elif mode == 'all':
         rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
         rolloff_key = math.floor(numpy.average(rolloff))
         centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
         centroid_key = math.floor(numpy.average(centroid))
         crossing_rate = librosa.feature.zero_crossing_rate(y)
-        crossing_rate_key = numpy.average(crossing_rate.transpose())
+        crossing_rate_key = int(math.ceil(numpy.average(crossing_rate.transpose())*100))
 
         key = str(rolloff_key) + settings.DELIMITER + str(centroid_key) + settings.DELIMITER + str(crossing_rate_key)
         return key
@@ -116,12 +116,12 @@ def data_gen():
     if not settings.FREQUENCY_SPLIT:
         return data_gen_single()
     else:
-        markov_master_low = tm('master_data_low')
-        markov_master_mid = tm('master_data_mid')
-        markov_master_high = tm('master_data_high')
-        for fname in os.listdir('./data'):
+        markov_master_low = tm('../data/generated_data/master_data_low')
+        markov_master_mid = tm('../data/generated_data/master_data_mid')
+        markov_master_high = tm('../data/generated_data/master_data_high')
+        for fname in os.listdir('../data/structural'):
             if fname[len(fname)-4:len(fname)] == '.wav':
-                curr_out_data = analyze(os.path.abspath('data/' + fname))
+                curr_out_data = analyze(os.path.abspath('../data/structural/' + fname))
                 markov_master_low.load_data(curr_out_data["low"])
                 markov_master_mid.load_data(curr_out_data["mid"])
                 markov_master_high.load_data(curr_out_data["high"])
@@ -136,9 +136,9 @@ def data_gen():
 # Generate data based on every file in the 'data' folder, no band analysis
 def data_gen_single():
     markov_master = tm('master_data')
-    for fname in os.listdir('./data'):
-        if fname[len(fname)-4:len(fname)] == '.wav':
-            curr_out_data = analyze(os.path.abspath('data/' + fname))
+    for fname in os.listdir('../data/structural'):
+        if fname.endswith('.wav') and not ('_low' in fname or '_mid' in fname or '_high' in fname):
+            curr_out_data = analyze(os.path.abspath('../data/structural/' + fname))
             markov_master.load_data(curr_out_data)
 
     markov_master.save()
@@ -148,13 +148,13 @@ def data_gen_single():
 def load_existing():
     if not settings.FREQUENCY_SPLIT:
         markov_master = tm()
-        markov_master.load_data('master_data.mkv')
+        markov_master.load_data('../data/generated_data/master_data.json')
         return markov_master
     else:
         markov_master_low = tm()
         markov_master_mid = tm()
         markov_master_high = tm()
-        markov_master_low.load_data('master_data_low.mkv')
-        markov_master_mid.load_data('master_data_mid.mkv')
-        markov_master_high.load_data('master_data_high.mkv')
+        markov_master_low.load_data('../data/generated_data/master_data_low.json')
+        markov_master_mid.load_data('../data/generated_data/master_data_mid.json')
+        markov_master_high.load_data('../data/generated_data/master_data_high.json')
         return {"low": markov_master_low, "mid": markov_master_mid, "high": markov_master_high}

@@ -14,21 +14,21 @@ import settings
 import sys, os
 import util
 
-if not os.path.isfile('master_data.mkv'):
+if not os.path.isfile('../data/generated_data/master_data.json') and not os.path.isfile('../data/generated_data/master_data_low.json'):
     print("error: data file does not exist!  use 'runanalysis.py' to generate data file before running quickgen.")
     exit()
-if not os.path.isfile('./samples/lib.json'):
+if not os.path.isfile('../data/samples/lib.json'):
     print("error: sample directory has not been analyzed!  use 'libgen.py' to analyze samples before running quickgen.")
     exit()
 
 print("running quickgen")
 markov_data = analyze.load_existing()
-lib = slib('./samples', analyzeall=False)
+lib = slib('../data/samples', analyzeall=False)
 
 if not settings.FREQUENCY_SPLIT:
     markov_data.initialize_chain() # initialize data to follow chain
     newsample = markov_data.get_next_outcome()
-    output = AudioSegment.from_wav('samples/' + lib.get_sample(newsample))
+    output = AudioSegment.from_wav('../data/samples/' + lib.get_sample(newsample))
 else:
     output = {}
     newsample = {}
@@ -37,7 +37,7 @@ else:
         newsample[band] = data.get_next_outcome() 
     output_set = lib.get_sample(newsample)
     for band, sound in output_set.items():
-        output[band] = AudioSegment.from_wav('samples/' + sound)
+        output[band] = AudioSegment.from_wav('../data/samples/' + sound)
 
 
 
@@ -46,7 +46,7 @@ curr_seconds = 0
 while curr_seconds < settings.DURATION:
     if not settings.FREQUENCY_SPLIT:
         newsample = markov_data.get_next_outcome()
-        output = audio.combine_samples(output, 'samples/' + lib.get_sample(newsample), CROSSFADE_DUR=3)
+        output = audio.combine_samples(output, '../data/samples/' + lib.get_sample(newsample), CROSSFADE_DUR=3)
         curr_seconds = output.duration_seconds
     else:
         for band, data in markov_data.items():
@@ -55,7 +55,7 @@ while curr_seconds < settings.DURATION:
         output_set = lib.get_sample(newsample)
         output_sounds = []
         for band, sound in output_set.items():
-            output[band] = audio.combine_samples(output[band], ('samples/' + sound))
+            output[band] = audio.combine_samples(output[band], ('../data/samples/' + sound))
         curr_seconds = min(output.values(), key=lambda sound: sound.duration_seconds).duration_seconds
 
 if settings.FREQUENCY_SPLIT:
@@ -77,7 +77,7 @@ if settings.FREQUENCY_SPLIT:
     output = newfile
 
 print()
-output.export(settings.FILENAME, format='wav')
+output.export('../data/generated_sound/' + settings.FILENAME, format='wav')
 print('file saved! ' + settings.FILENAME)
 
 

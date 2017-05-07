@@ -87,7 +87,8 @@ for state, opts in possibilities.items():
 
 selections = OrderedDict(sorted(selections.items(), key=lambda t: str.lower(t[0])))
 for state, selection in selections.items():
-    print(selection[0] + (' ') + selection[12] + (' ') + (selection[27]))
+    #print(selection[0] + (' ') + selection[12] + (' ') + (selection[27]))
+    print(selection[0])
 
 
 

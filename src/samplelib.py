@@ -20,16 +20,16 @@ class SampleLib:
                 sys.stdout.write('\r' + "classifying " + fname)
                 sys.stdout.flush()
                 if fname[len(fname)-4:len(fname)] == '.wav':
-                    classifier = str(analyze.sound_analyze(os.path.abspath('samples/' + fname), settings.ANALYSIS_MODE))
+                    classifier = str(analyze.sound_analyze(os.path.abspath('../data/samples/' + fname), settings.ANALYSIS_MODE))
                     if classifier in self.lib:
                         self.lib[classifier].append(fname)
                     else:
                         self.lib[classifier] = [fname]
 
             data = json.dumps(self.lib)
-            open(os.path.abspath('samples/lib.json'), 'w').write(data)
+            open(os.path.abspath('../data/samples/lib.json'), 'w').write(data)
         else:
-            self.lib = json.loads(open(os.path.abspath('samples/lib.json')).read())
+            self.lib = json.loads(open(os.path.abspath('../data/samples/lib.json')).read())
 
     def get_sample(self, classifier):
         if not settings.FREQUENCY_SPLIT:

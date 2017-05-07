@@ -6,10 +6,10 @@
 # and generation
 
 # Set the duration for the output soundscape, in seconds
-DURATION = 60
+DURATION = 30
 
 # Set the file name for the soundscape
-FILENAME = 'soundscape.wav'
+FILENAME = 'halo-new-analysis.wav'
 
 # Set whether detailed prints show
 VERBOSE = False
@@ -31,7 +31,7 @@ VERBOSE = False
 # signal changes - that is, the rate at which the signal
 # changes from positive to negative.
 
-ANALYSIS_MODE = 'all'
+ANALYSIS_MODE = 'spectral_centroid'
 
 # -------------PULSE DETECTION SETTINGS--------------------
 # Sounds will be analyzed based on detecting spikes in the 
@@ -46,7 +46,7 @@ ANALYSIS_MODE = 'all'
 # some amount of inference based on the overall tempo of the 
 # beats in the sound file.
 
-PULSE_TYPE = 'beat'
+PULSE_TYPE = 'onset'
 
 # -------------FREQUENCY SEPARATION SETTINGS---------------
 # Stochastic Soundscape is able to analyze sounds and separate
@@ -58,10 +58,10 @@ PULSE_TYPE = 'beat'
 FREQUENCY_SPLIT = True
 
 # Set the upper limit for the low-frequency band, in hz
-LOW_FREQUENCY_LIM = 3000
+LOW_FREQUENCY_LIM = 6000
 
 # Set the lower limit for the high-frequency band, in hz
-HIGH_FREQUENCY_LIM = 7000
+HIGH_FREQUENCY_LIM = 12000
 
 ########### DEV SETTINGS: USE CAUTION WHEN MODIFYING ###########
 

@@ -6,6 +6,6 @@
 
 from samplelib import SampleLib as slib
 
-lib = slib('./samples')
+lib = slib('../data/samples')
 
 

@@ -8,8 +8,8 @@ import wave, struct
 import analyze
 import settings, audio
 
-IN_DIR = './long_sounds'
-OUT_DIR = './samples'
+IN_DIR = '../data/sound_clipper_sources'
+OUT_DIR = '../data/samples'
 counter = 0
 
 for fname in os.listdir(IN_DIR):
