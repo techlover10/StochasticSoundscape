@@ -9,7 +9,7 @@
 DURATION = 30
 
 # Set the default file name for the soundscape
-FILENAME = 'halo-new-analysis.wav'
+FILENAME = 'soundscape.wav'
 
 # Set whether detailed prints show
 VERBOSE = False
