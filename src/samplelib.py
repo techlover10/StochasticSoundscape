@@ -74,7 +74,7 @@ class SampleLib:
 
     # Given a classifier, returns the file name of a sample which most closely matches the classifier
     def get_single_sample(self, classifier):
-        sample_choices = SampleArr(self.classifier_compare, limit=settings.SAMPLE_SELECTION_SIZE)
+        sample_choices = SampleArr(classifier, self.classifier_dist, limit=settings.SAMPLE_SELECTION_SIZE)
         for key in self.lib.keys():
             sample_choices.add(key)
         classifier_choice = random.choice(sample_choices.array)

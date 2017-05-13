@@ -6,11 +6,12 @@
 # Class defines an array that is designed for managing
 # similar samples and keeping them sorted.
 # Requires a comparator.  For two items, 
-# comparator(a, b) < 0 implies that a < b
+# comparator(a, b) gives some measure of "distance".
 # in our measurements.
 class SampleArr:
-    def __init__(self, comparator, limit=10):
+    def __init__(self, target, comparator, limit=10):
         self.array = []
+        self.target = target
         self.comparator = comparator
         self.limit = 10
 
@@ -28,7 +29,7 @@ class SampleArr:
         while curridx > 0:
             item = self.array[curridx]
             prev = self.array[curridx - 1]
-            if self.comparator(prev, item) > 0:
+            if self.comparator(item, self.target) < self.comparator(prev, self.target): # item is closer to target
                 # swap
                 self.array[curridx-1] = item
                 self.array[curridx] = prev

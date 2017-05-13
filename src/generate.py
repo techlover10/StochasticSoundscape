@@ -33,16 +33,16 @@ def generate():
     if not settings.FREQUENCY_SPLIT:
         markov_data.initialize_chain() # initialize data to follow chain
         newsample = markov_data.get_next_outcome()
-        output = AudioSegment.from_wav('../data/samples/' + lib.get_sample(newsample))
+        output = AudioSegment.from_wav(lib.get_sample(newsample))
     else:
         output = {}
         newsample = {}
         for band, data in markov_data.items():
             data.initialize_chain()
-            newsample[band] = data.get_next_outcome() 
+            newsample[band] = data.get_next_outcome()
         output_set = lib.get_sample(newsample)
         for band, sound in output_set.items():
-            output[band] = AudioSegment.from_wav('../data/samples/' + sound)
+            output[band] = AudioSegment.from_wav(sound)
     
     
     
@@ -51,7 +51,7 @@ def generate():
     while curr_seconds < settings.DURATION:
         if not settings.FREQUENCY_SPLIT:
             newsample = markov_data.get_next_outcome()
-            output = audio.combine_samples(output, '../data/samples/' + lib.get_sample(newsample), CROSSFADE_DUR=3)
+            output = audio.combine_samples(output, lib.get_sample(newsample), CROSSFADE_DUR=6)
             curr_seconds = output.duration_seconds
         else:
             for band, data in markov_data.items():
@@ -60,7 +60,11 @@ def generate():
             output_set = lib.get_sample(newsample)
             output_sounds = []
             for band, sound in output_set.items():
-                output[band] = audio.combine_samples(output[band], ('../data/samples/' + sound))
+                try:
+                    output[band] = audio.combine_samples(output[band], (sound))
+                except:
+                    # Occasionally a sample does not play nice, just skip it and move on
+                    pass
             curr_seconds = min(output.values(), key=lambda sound: sound.duration_seconds).duration_seconds
     
     if settings.FREQUENCY_SPLIT:
