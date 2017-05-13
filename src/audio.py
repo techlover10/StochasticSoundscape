@@ -3,7 +3,7 @@
 # Copyright © 2017 jared <jared@jared-devstation>
 #
 
-from pydub import AudioSegment, scipy_effects
+from pydub import AudioSegment, scipy_effects, effects
 import os
 import settings, util
 
@@ -12,6 +12,7 @@ def combine_samples(acc, file2, CROSSFADE_DUR=100):
     util.debug_print('combining ' + file2)
     sample2 = AudioSegment.from_wav(file2)
     output = acc.append(sample2, crossfade=CROSSFADE_DUR)
+    output = effects.normalize(output)
     return output
 
 # combine audio samples with crossfade, from within program

@@ -47,7 +47,8 @@ class SampleLib:
         sample_choices = SampleArr(self.classifier_compare, limit=settings.SAMPLE_SELECTION_SIZE)
         for key in self.lib.keys():
             sample_choices.add(key)
-        return random.choice(sample_choices.array)
+        classifier_choice = random.choice(sample_choices.array)
+        return random.choice(list(self.lib[classifier_choice]))
 
     # Distance function on classifier keys
     @staticmethod

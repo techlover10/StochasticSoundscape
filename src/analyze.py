@@ -144,7 +144,7 @@ class Analysis:
             markov_master = tm('master_data')
             for fname in os.listdir('../data/structural'):
                 if fname.endswith('.json'):
-                    markov_master.load_data(fname)
+                    markov_master.load_data('../data/structural' + fname)
             markov_master.save()
             return markov_master
         else:
@@ -152,12 +152,13 @@ class Analysis:
             markov_master_mid = tm('../data/generated_data/master_data_mid')
             markov_master_high = tm('../data/generated_data/master_data_high')
             for fname in os.listdir('../data/structural'):
-                if fname.endswith('_low.json'):
-                    markov_master_low.load_data(fname)
-                elif fname.endswith('_mid.json'):
-                    markov_master_mid.load_data(fname)
-                elif fname.endswith('_high.json'):
-                    markov_master_high.load_data(fname)
+                if not '_norm' in fname:
+                    if '_low' in fname:
+                        markov_master_low.load_data('../data/structural/' + fname)
+                    elif '_mid' in fname:
+                        markov_master_mid.load_data('../data/structural/' + fname)
+                    elif '_high' in fname:
+                        markov_master_high.load_data('../data/structural/' + fname)
     
             markov_master_low.save()
             markov_master_mid.save()
