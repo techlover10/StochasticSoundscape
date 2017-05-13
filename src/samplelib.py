@@ -18,6 +18,9 @@ class SampleLib:
         if analyzeall:
             for fname in os.listdir(self.directory):
                 if fname.endswith('.wav'):
+                    sys.stdout.write('\r' + (' '*int(os.popen('stty size', 'r').read().split()[1])))
+                    sys.stdout.write('\r' + "classifying " + fname)
+                    sys.stdout.flush()
                     classifier = str(Analysis.sound_analyze(os.path.abspath('../data/samples/' + fname), settings.ANALYSIS_MODE))
                     if classifier in self.lib:
                         self.lib[classifier].append(fname)

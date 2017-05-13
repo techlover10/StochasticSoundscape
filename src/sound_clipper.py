@@ -5,7 +5,7 @@
 
 import sys, os, math
 import wave, struct
-import analyze
+from analyze import Analysis
 import settings, audio
 from multiprocessing import Pool 
 
@@ -44,7 +44,7 @@ class FileSplitter:
         print('splitting ' + fname)
         counter = 0
         current_file = wave.open(IN_DIR + '/' + fname, 'r')
-        pulse_loc = analyze.pulse_detect(IN_DIR + '/' + fname, settings.PULSE_TYPE)
+        pulse_loc = Analysis.pulse_detect(IN_DIR + '/' + fname, settings.PULSE_TYPE)
         prev_point = 0
         for i in range (0, len(pulse_loc)):
             pulse_point = pulse_loc[i] * 1024 # 1024 = default hop length of 512 * sample rate which is halved
