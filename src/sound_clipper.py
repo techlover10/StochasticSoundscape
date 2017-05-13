@@ -7,29 +7,41 @@ import sys, os, math
 import wave, struct
 import analyze
 import settings, audio
-import threading
+from multiprocessing import Process, Pool 
 
 IN_DIR = '../data/sound_clipper_sources'
 OUT_DIR = '../data/samples'
 
 def generate_sounds():
-    for fname in os.listdir(IN_DIR):
-        if fname.endswith('.wav') or fname.endswith('.mp3'):
-            FileSplitter(fname).start()
-    if settings.FREQUENCY_SPLIT:
-        for fname in os.listdir(OUT_DIR):
+    FileSplitter().main()
+
+class FileSplitter:
+
+    def __init__(self):
+        self.pool = Pool(8, maxtasksperchild=1)
+        
+    def main(self):
+        files_arr = []
+        for fname in os.listdir(IN_DIR):
             if fname.endswith('.wav') or fname.endswith('.mp3'):
-                OutfileSplitter(fname).start()
+                files_arr.append(fname)
+        self.pool.map(FileSplitter.split_single_file, files_arr)
+        self.pool.close()
+        self.pool.join()
+        files_arr = []
+        if settings.FREQUENCY_SPLIT:
+            for fname in os.listdir(OUT_DIR):
+                if fname.endswith('.wav') or fname.endswith('.mp3'):
+                    files_arr.append(fname)
+        self.pool = Pool(8, maxtasksperchild=1)
+        self.pool.map(FileSplitter.split_outfile, files_arr)
+        self.pool.close()
+        self.pool.join()
 
-class FileSplitter(threading.Thread):
-    def __init__(self, fname):
-        self.fname = fname
-        threading.Thread.__init__ ( self )
 
-    def run(self):
-        self.split_single_file(self.fname)
-
-    def split_single_file(self, fname):
+    @staticmethod
+    def split_single_file(fname):
+        print('splitting ' + fname)
         counter = 0
         current_file = wave.open(IN_DIR + '/' + fname, 'r')
         pulse_loc = analyze.pulse_detect(IN_DIR + '/' + fname, settings.PULSE_TYPE)
@@ -46,15 +58,8 @@ class FileSplitter(threading.Thread):
             working.close()
             prev_point = pulse_point
 
-class OutfileSplitter(threading.Thread):
-    def __init__(self, fname):
-        self.fname = fname
-        threading.Thread.__init__ ( self )
-
-    def run(self):
-        self.split_outfile(self.fname)
-
-    def split_outfile(self, fname):
+    @staticmethod
+    def split_outfile(fname):
         audio.split_file(OUT_DIR + '/' + fname)
         os.remove(OUT_DIR + '/' + fname)
 
