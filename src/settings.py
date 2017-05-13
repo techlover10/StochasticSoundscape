@@ -12,10 +12,10 @@ DURATION = 600
 FILENAME = 'america-full.wav'
 
 # Set whether detailed prints show
-VERBOSE = False
+VERBOSE = True
 
 # Set number of threads assigned, default is 8
-THREADS = 6
+THREADS = 8
 
 # Set the amount of "randomness" in sample selection - the sample library selects from the n closest matching sounds, and this defines the n.
 SAMPLE_SELECTION_SIZE = 10

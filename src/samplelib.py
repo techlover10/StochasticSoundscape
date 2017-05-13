@@ -10,27 +10,57 @@ import sys, os, math, random
 from analyze import Analysis
 import settings
 from samplearr import SampleArr
+from multiprocessing import Pool
+from util import debug_print
 
 class SampleLib:
     def __init__(self, dir, analyzeall=True):
         self.directory = dir
         self.lib = {}
+        self.pool = Pool(settings.THREADS, maxtasksperchild=1)
+        analyze_arr = []
         if analyzeall:
             for fname in os.listdir(self.directory):
                 if fname.endswith('.wav'):
-                    sys.stdout.write('\r' + (' '*int(os.popen('stty size', 'r').read().split()[1])))
-                    sys.stdout.write('\r' + "classifying " + fname)
-                    sys.stdout.flush()
-                    classifier = str(Analysis.sound_analyze(os.path.abspath('../data/samples/' + fname), settings.ANALYSIS_MODE))
-                    if classifier in self.lib:
-                        self.lib[classifier].append(fname)
-                    else:
-                        self.lib[classifier] = [fname]
+                    analyze_arr.append(os.path.abspath('../data/samples/' + fname))
 
+            analyze_segs = []
+            arr_len = len(analyze_arr)
+            seg_length = math.ceil(len(analyze_arr)/settings.THREADS)
+            for i in range (1, settings.THREADS+1):
+                segment = analyze_arr[(i-1)*seg_length:i*seg_length]
+                analyze_segs.append(segment)
+
+            self.pool.map(self.run_classifier_lib, analyze_segs)
+            self.pool.close()
+            self.pool.join()
+
+            for fname in os.listdir(self.directory + '/libs'):
+                if fname.endswith('.json'):
+                    curr_lib = json.loads(open(os.path.abspath(self.directory + '/libs/' + fname)).read())
+                    for key in curr_lib:
+                        if key in self.lib:
+                            self.lib[key] = self.lib[key] + curr_lib[key]
+                        else:
+                            self.lib[key] = curr_lib[key]
             data = json.dumps(self.lib)
             open(os.path.abspath('../data/samples/lib.json'), 'w').write(data)
+
         else:
             self.lib = json.loads(open(os.path.abspath('../data/samples/lib.json')).read())
+
+    @staticmethod
+    def run_classifier_lib(fname_arr):
+        lib = {}
+        for fname in fname_arr:
+            debug_print('analyzing sample: ' + fname)
+            classifier = str(Analysis.sound_analyze(fname, settings.ANALYSIS_MODE))
+            if classifier in lib:
+                lib[classifier].append(fname)
+            else:
+                lib[classifier] = [fname]
+        data = json.dumps(lib)
+        open(os.path.abspath('../data/samples/libs/' + str(os.getpid()) + '_lib.json'), 'w').write(data)
 
     def get_sample(self, classifier):
         if not settings.FREQUENCY_SPLIT:
