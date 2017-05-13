@@ -7,7 +7,7 @@ import sys, os, math
 import wave, struct
 import analyze
 import settings, audio
-from multiprocessing import Process, Pool 
+from multiprocessing import Pool 
 
 IN_DIR = '../data/sound_clipper_sources'
 OUT_DIR = '../data/samples'
@@ -18,7 +18,7 @@ def generate_sounds():
 class FileSplitter:
 
     def __init__(self):
-        self.pool = Pool(8, maxtasksperchild=1)
+        self.pool = Pool(settings.THREADS, maxtasksperchild=1)
         
     def main(self):
         files_arr = []

@@ -14,6 +14,9 @@ FILENAME = 'soundscape.wav'
 # Set whether detailed prints show
 VERBOSE = False
 
+# Set number of threads assigned, default is 8
+THREADS = 8
+
 # -------------SOUND ANALYSIS SETTINGS---------------------
 # Sounds can be analyzed based on a number of different features.
 #
