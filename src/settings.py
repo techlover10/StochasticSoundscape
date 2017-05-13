@@ -6,16 +6,16 @@
 # and generation
 
 # Set the duration for the output soundscape, in seconds
-DURATION = 30
+DURATION = 600
 
 # Set the default file name for the soundscape
-FILENAME = 'soundscape.wav'
+FILENAME = 'america-full.wav'
 
 # Set whether detailed prints show
 VERBOSE = False
 
 # Set number of threads assigned, default is 8
-THREADS = 8
+THREADS = 6
 
 # Set the amount of "randomness" in sample selection - the sample library selects from the n closest matching sounds, and this defines the n.
 SAMPLE_SELECTION_SIZE = 10

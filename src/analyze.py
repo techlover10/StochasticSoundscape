@@ -68,7 +68,7 @@ class Analysis:
         prev_classifier = None
         hash_dict = {}
     
-        TEMP_NAME = 'temp.wav'
+        TEMP_NAME = (str(os.getpid())) +  'temp.wav'
         markov_data = tm(fname) # initialize markov object
         
         # Iterate over current file INTERVAL frames at a time
@@ -108,7 +108,11 @@ class Analysis:
             feature = librosa.feature.spectral_rolloff(y=y, sr=sr)
             return math.floor(numpy.average(feature))
         elif mode == 'spectral_centroid':
-            feature = librosa.feature.spectral_centroid(y=y, sr=sr)
+            try:
+                feature = librosa.feature.spectral_centroid(y=y, sr=sr)
+            except:
+                print(fname)
+                exit()
             return math.floor(numpy.average(feature))
         elif mode == 'zero_crossing':
             ft = librosa.feature.zero_crossing_rate(y)
