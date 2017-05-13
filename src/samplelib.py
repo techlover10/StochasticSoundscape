@@ -7,8 +7,9 @@ import librosa
 import wave, struct
 import json
 import sys, os, math, random
-import analyze
+from analyze import Analysis
 import settings
+from samplearr import SampleArr
 
 class SampleLib:
     def __init__(self, dir, analyzeall=True):
@@ -16,11 +17,8 @@ class SampleLib:
         self.lib = {}
         if analyzeall:
             for fname in os.listdir(self.directory):
-                sys.stdout.write('\r' + (' '*int(os.popen('stty size', 'r').read().split()[1])))
-                sys.stdout.write('\r' + "classifying " + fname)
-                sys.stdout.flush()
-                if fname[len(fname)-4:len(fname)] == '.wav':
-                    classifier = str(analyze.sound_analyze(os.path.abspath('../data/samples/' + fname), settings.ANALYSIS_MODE))
+                if fname.endswith('.wav'):
+                    classifier = str(Analysis.sound_analyze(os.path.abspath('../data/samples/' + fname), settings.ANALYSIS_MODE))
                     if classifier in self.lib:
                         self.lib[classifier].append(fname)
                     else:
@@ -43,28 +41,14 @@ class SampleLib:
 
     # Given a classifier, returns the file name of a sample which most closely matches the classifier
     def get_single_sample(self, classifier):
-        if classifier in self.lib:
-            return random.choice(self.lib[classifier])
-        else:
-            close_floor = list(self.lib.keys())[0]
-            close_ceil = list(self.lib.keys())[0]
-            best_est = list(self.lib.keys())[0]
-            best_delta = self.classifier_dist(classifier, best_est)
-            for key in self.lib.keys():
-                if self.classifier_compare(key, classifier) < 0 and self.classifier_compare(key, close_floor) > 0:
-                    close_floor = key
-                elif self.classifier_compare(key, close_ceil) < 0:
-                    close_ceil = key
-
-                new_delta = self.classifier_dist(classifier, key) 
-                if (new_delta < best_delta):
-                    best_est = key
-                    best_delta = new_delta
-
-        return random.choice(list(self.lib[best_est]))
+        sample_choices = SampleArr(self.classifier_compare, limit=settings.SAMPLE_SELECTION_SIZE)
+        for key in self.lib.keys():
+            sample_choices.add(key)
+        return random.choice(sample_choices.array)
 
     # Distance function on classifier keys
-    def classifier_dist(self, c1, c2):
+    @staticmethod
+    def classifier_dist(c1, c2):
         if not settings.ANALYSIS_MODE == 'all':
             return math.fabs(float(c2) - float(c1))
 
@@ -78,7 +62,8 @@ class SampleLib:
         
 
     # Comparison function on classifier keys
-    def classifier_compare(self, c1, c2):
+    @staticmethod
+    def classifier_compare(c1, c2):
         if not settings.ANALYSIS_MODE == 'all':
             if float(c1) > float(c2):
                 return 1

@@ -23,7 +23,7 @@ class FileSplitter:
     def main(self):
         files_arr = []
         for fname in os.listdir(IN_DIR):
-            if fname.endswith('.wav') or fname.endswith('.mp3'):
+            if fname.endswith('.wav'):
                 files_arr.append(fname)
         self.pool.map(FileSplitter.split_single_file, files_arr)
         self.pool.close()
@@ -31,7 +31,7 @@ class FileSplitter:
         files_arr = []
         if settings.FREQUENCY_SPLIT:
             for fname in os.listdir(OUT_DIR):
-                if fname.endswith('.wav') or fname.endswith('.mp3'):
+                if fname.endswith('.wav'):
                     files_arr.append(fname)
         self.pool = Pool(8, maxtasksperchild=1)
         self.pool.map(FileSplitter.split_outfile, files_arr)
