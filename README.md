@@ -37,7 +37,10 @@ Simply place structural material in the `data/structural` folder, and a collecti
 Don't have enough short samples?  No problem.  Stochastic Soundscape includes a script which allows samples to be generated from any longer source audio file.  Simply copy any audio files into the folder `data/sound_clipper_sources/` and run `./runclipper.py` (or `python3 runclipper.py`).  This will chop the audio into tiny samples and place them in the `samples/` folder.
 
 #### Quickgen
-`main.py` runs the structural analysis, the sample analysis, and the generation process.  Each of these can be run individually with `runanalysis.py`, `libgen.py`, and `quickgen.py`.  For example, if you've changed the sample set but you have not changed your data, you might wish to run `libgen.py` and `quickgen.py` to save time.  
+`main.py` runs the structural analysis, the sample analysis, and the generation process.  Each of these can be run individually with `runanalysis.py`, `libgen.py`, and `quickgen.py`.  For example, if you've changed the sample set but you have not changed your data, you might wish to run `libgen.py` and `quickgen.py` to save time.
+
+#### File Names
+Both `quickgen.py` and `main.py` take one argument: a file name.  If the file name is not specified, it will default to whatever is set in `settings.py`.  Otherwise, the output file will be whatever is specified (so `./quickgen.py my-soundscape.wav` will generate a file called `my-soundscape.wav` in the generated_sound folder.
 
 
 ## Technical Details and Structure
