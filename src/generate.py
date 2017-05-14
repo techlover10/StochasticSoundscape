@@ -73,10 +73,8 @@ def generate():
             if i.duration_seconds > max_len:
                 max_len = i.duration_seconds
         
-        util.debug_print(max_len)
         newfile = AudioSegment.silent(duration=max_len*1000, frame_rate=output['low'].frame_rate) # length in milliseconds
         for i in output.values():
-            util.debug_print(i)
             newfile = newfile.overlay(i)
     
         #if settings.VERBOSE:
