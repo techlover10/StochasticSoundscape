@@ -27,6 +27,9 @@ To install on a standard Ubuntu distro, you should be able to run the following 
 - `sudo pip3 install -r requirements.txt`
 - `sudo apt-get install ffmpeg
 
+To initialize the submodule dependencies, run the following:
+`git submodule update --init --recursive`
+
 ### Usage
 Stochastic Soundscape uses two types of source material, **structural** and **samples**.  **Structural** data is analyzed to generate the stochastic transition matrix from which the **samples** will be assembled.
 
