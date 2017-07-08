@@ -55,7 +55,7 @@ class Analysis:
             os.remove(fname + '_high.wav')
     
         else:
-            analyze_single(fname)
+            Analysis.analyze_single(fname)
     
     # Analyze a single sound file
     # Return the file with the frequency data
