@@ -145,10 +145,10 @@ class Analysis:
     @staticmethod
     def master_combine():
         if not settings.FREQUENCY_SPLIT:
-            markov_master = tm('master_data')
+            markov_master = tm('../data/generated_data/master_data')
             for fname in os.listdir('../data/structural'):
                 if fname.endswith('.json'):
-                    markov_master.load_data('../data/structural' + fname)
+                    markov_master.load_data('../data/structural/' + fname)
             markov_master.save()
             return markov_master
         else:
