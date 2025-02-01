@@ -67,7 +67,7 @@ class Analysis:
         length = current_file.getnframes()
         prev_classifier = None
         hash_dict = {}
-    
+
         TEMP_NAME = (str(os.getpid())) +  'temp.wav'
         markov_data = tm(fname) # initialize markov object
         
@@ -94,7 +94,7 @@ class Analysis:
                 markov_data.add_transition(prev_classifier, classifier)
     
             prev_classifier = classifier
-    
+
         os.remove(TEMP_NAME)
         return markov_data.save() # save the associated data for that file
 
@@ -136,10 +136,10 @@ class Analysis:
     def pulse_detect(fname, mode):
         y, sr = librosa.load(fname)
         if mode == 'onset':
-            array = librosa.onset.onset_detect(y, sr)
+            array = librosa.onset.onset_detect(y=y, sr=sr)
             return array
         elif mode == 'beat':
-            array = librosa.beat.beat_track(y,sr)[1]
+            array = librosa.beat.beat_track(y=y,sr=sr)[1]
             return array
 
     @staticmethod

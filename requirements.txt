@@ -2,3 +2,6 @@ numpy
 pydub
 librosa
 scipy
+standard-sunau
+standard-aifc
+audioloop-lts

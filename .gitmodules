@@ -1,3 +1,4 @@
 [submodule "src/PyTransitionMatrix"]
 	path = src/PyTransitionMatrix
-	url = git@github.com:techlover10/PyTransitionMatrix.git
+	url = https://github.com/techlover10/PyTransitionMatrix.git
+
